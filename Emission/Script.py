@@ -9,7 +9,7 @@ import wave, argparse, sys, time
 #IM GETTING TIRED OF THIS SHIT
 
 #shit to transfer
-chain = []
+chain = [0,1,0,1]
 
 #shitty amplitudes for the ask
 AH = 1
@@ -18,16 +18,22 @@ AB = 0.5
 #samplingrate cunt
 samplingrate = 22000
 
-t = 0: 1/fs : 1
+N = 44100
+tiv = 1/N
+t=0
+r=0
+signal = []
+print(len(chain))
 
-time = []
-ASK_signal = []
-Digital_signal = []
+while(t<len(chain)):
+    signal=signal+[chain[int(t)]*np.sin(2*np.pi*21000*t)]
+    t = t+tiv
+    print(t)
+print(signal)
 
-for ii = 1: 1: length(bit_stream) :
-
-    ASK_signal = [ASK_signal(bit_stream(ii) == 0) * A1 * sin(2 * pi * f * t) + (bit_stream(ii) == 1) * A2 * sin(2 * pi * f * t)]
-
-    Digital_signal = [Digital_signal(bit_stream(ii) == 0) * zeros(1, length(t)) + (bit_stream(ii) == 1) * ones(1, length(t))]
-    time = [time,t]
-    t = t + 1
+figure, axe1 = plt.subplots()
+axe1.set_xlabel("Temps (s)")
+axe1.set_ylabel("Position en fonction du temps", color="red")
+axe1.plot(signal, color="red")
+axe1.tick_params(axis="y", labelcolor="red")
+plt.show()
