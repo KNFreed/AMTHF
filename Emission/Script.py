@@ -33,21 +33,16 @@ def compress():
     #Compression de chaque texte
     for b in range(0,len(uncompressed)):
         #Création du dictionnaire
-
-        dict_size = 256
+        dict_size = 255
         dictionary = {chr(i): i for i in range(dict_size)}
         w = ""
-        result = []
         for c in uncompressed[b]:
             wc = w + c
             if wc in dictionary:
                 w = wc
             else:
                 compressed.append(dictionary[w])
-                # Add wc to the dictionary.
-                dictionary[wc] = dict_size
-                dict_size += 1
-                w = c
+                w=c
         # Output the code for w.
         if w:
             compressed.append(dictionary[w])
@@ -59,26 +54,25 @@ def dectobin(evt):
         binary = binary+[int(x) for x in list('{0:0b}'.format(evt[j]))]
         binary = binary+[2]
     return binary
-#shit to transfer
-chains = dectobin(compress())
 
-N = 1000
-tiv = 1/N
-t=0
-r=0
-signal = []
+def modul():
+    chains = dectobin(compress())
 
-
-
-while(t<len(chains)):
-    signal=signal+[chains[int(t)]*np.sin(2*np.pi*10*t)]
-    t = t+tiv
-    print(t)
-print(signal)
+    N = 44100
+    tiv = 1/N
+    t=0
+    r=0
+    sign = []
+    fc = 2
+    lplus = int(N/fc)
+    lplusplus = 1.5
+    while(t<len(chains)):
+        sign=sign+[chains[int(t)]*np.sin(2*np.pi*fc*t)]
+        t = t+tiv
 
 figure, axe1 = plt.subplots()
 axe1.set_xlabel("Temps (s)")
 axe1.set_ylabel("Position en fonction du temps", color="red")
-axe1.plot(signal, color="red")
+axe1.plot(sign, color="red")
 axe1.tick_params(axis="y", labelcolor="red")
 plt.show()
