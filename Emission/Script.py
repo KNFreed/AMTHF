@@ -57,14 +57,12 @@ def dectobin(evt):
     binary=[]
     for j in range (0,len(evt)):
         binary = binary+[int(x) for x in list('{0:0b}'.format(evt[j]))]
-    print(evt)
-    print(binary)
+        binary = binary+[2]
     return binary
-
 #shit to transfer
 chains = dectobin(compress())
 
-N = 44100
+N = 1000
 tiv = 1/N
 t=0
 r=0
@@ -73,7 +71,7 @@ signal = []
 
 
 while(t<len(chains)):
-    signal=signal+[chains[int(t)]*np.sin(2*np.pi*21000*t)]
+    signal=signal+[chains[int(t)]*np.sin(2*np.pi*10*t)]
     t = t+tiv
     print(t)
 print(signal)
