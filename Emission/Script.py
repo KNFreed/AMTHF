@@ -3,8 +3,6 @@
 from scipy import signal
 from scipy.io.wavfile import read, write
 import numpy as np
-import matplotlib.pyplot as plt
-import wave, argparse, sys, time
 import os
 
 def fileparse():
@@ -43,7 +41,7 @@ def compress():
             else:
                 compressed.append(dictionary[w])
                 w=c
-        # Output the code for w.
+        # Résultat
         if w:
             compressed.append(dictionary[w])
     return compressed
@@ -57,22 +55,16 @@ def dectobin(evt):
 
 def modul():
     chains = dectobin(compress())
-
     N = 44100
     tiv = 1/N
     t=0
     r=0
     sign = []
     fc = 2
-    lplus = int(N/fc)
-    lplusplus = 1.5
     while(t<len(chains)):
         sign=sign+[chains[int(t)]*np.sin(2*np.pi*fc*t)]
         t = t+tiv
+    return sign
 
-figure, axe1 = plt.subplots()
-axe1.set_xlabel("Temps (s)")
-axe1.set_ylabel("Position en fonction du temps", color="red")
-axe1.plot(sign, color="red")
-axe1.tick_params(axis="y", labelcolor="red")
-plt.show()
+def sign2audio():
+    

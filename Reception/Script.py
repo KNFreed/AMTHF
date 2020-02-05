@@ -1,19 +1,19 @@
 #!/usr/bin/env python
 
 from scipy import signal
-from scipy.io.wavfile import read, write
-import numpy as np
-import matplotlib.pyplot as plt
-import wave, argparse, sys, time
-import os
+from scipy.io.wavfile import read
+import wave
 import configparser
 
 config = configparser.ConfigParser()
 config.read_file(open(r'config.txt'))
 
+original = wave.open("test.wav", 'rb')
+samplingrate = wave.Wave_read.getframerate(original)
+
+lplus = int(samplingrate/2)
+
 def filter():
-    original = wave.open("test.wav", 'rb')
-    samplingrate = wave.Wave_read.getframerate(original)
 
     input_data = read("test.wav")
     audio = input_data[1]
@@ -24,8 +24,8 @@ def filter():
     filtertype = "lowpass"
     filterfreq = [2000]
 
-    # Échantillonage
-    f = signal.resample(audio, echfreq)
+    # Échantillonage    f = signal.resample(audio, echfreq)
+
     # Paramètres de filtrage
     if (filtertype == "bandstop") or (filtertype =="bandpass"):
         cutoff = [filterfreq[0]/nyqfreq, filterfreq[1]/nyqfreq]
@@ -34,7 +34,7 @@ def filter():
         cutoff = filterfreq[0] / nyqfreq
         cutoffreq = filterfreq[0]
     #Filtrage
-    b, a = signal.butter(5, cutoff, btype=filtertype)
+    b, a = signal.butter(6, cutoff, btype=filtertype)
     filteredaudio = signal.lfilter(b, a, f)
     return filteredaudio
 
@@ -75,14 +75,11 @@ def bin2dec():
 
 def dec2text():
     evt = bin2dec()
-    from io import StringIO
 
-    # Build the dictionary.
+    # Dicitonnaire
     dict_size = 255
     dictionary = {i: chr(i) for i in range(dict_size)}
 
-    # use StringIO, otherwise this becomes O(N^2)
-    # due to string concatenation in a loop
     output = open("output.txt", "w")
     text=""
     for k in evt:
