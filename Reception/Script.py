@@ -15,10 +15,10 @@ def filter():
     audio = input_data[1]
 
     #vars
-    echfreq = 10000
+    echfreq = 44100
     nyqfreq = echfreq / 2
-    filtertype = "highpass"
-    filterfreq = [2]
+    filtertype = "bandpass"
+    filterfreq = [4000,8000]
 
     # Échantillonage    f = signal.resample(audio, echfreq)
 
@@ -28,18 +28,23 @@ def filter():
     else:
         cutoff = filterfreq[0] / nyqfreq
     #Filtrage
-    b, a = signal.butter(6, cutoff, btype=filtertype)
+    b, a = signal.butter(10, cutoff, btype=filtertype)
     filteredaudio = signal.lfilter(b, a, audio)
     filsdepute = np.array(filteredaudio, dtype=np.float32)
-    write("test3.wav", 44100, filsdepute)
-    return filteredaudio
+    return filsdepute
 
 def demodul():
     sign = filter()
-    l = 0
+    l = 15
     lplus = 20*49
     demod = []
-
+    print(sign)
+    while (l<len(sign)):
+        if 1.0>sign[l]>0.95:
+            print(l)
+            l=l+1
+        else:
+            l=l+1
     while ((l + lplus) < len(sign)):
         if sign[l] == 1.0 and sign[(l + lplus)] == 1.0:
             demod = demod + [1]
