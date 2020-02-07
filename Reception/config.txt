@@ -1,1 +1,6 @@
 [Config]
+file = hidden with noise.wav
+echfreq = 44100
+filtertype = bandpass
+filterfreq = 15000
+2ndfilterfreq = 20000
